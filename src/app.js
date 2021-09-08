@@ -337,6 +337,20 @@ class App{
         </div>
         `);
 
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        async function eventFire(el, etype){
+          await sleep(10);
+          if (el.fireEvent) {
+            el.fireEvent('on' + etype);
+          } else {
+            var evObj = document.createEvent('Events');
+            evObj.initEvent(etype, true, false);
+            el.dispatchEvent(evObj);
+          }
+        }
+        
         trajectoryPage
             .find('#lifeTrajectory')
             .click(()=>{
@@ -372,6 +386,7 @@ class App{
                     <li>体质：${property.STR} </li>
                     <li>家境：${property.MNY} </li>
                     <li>快乐：${property.SPR} </li>`);
+                    eventFire(document.getElementById('lifeTrajectory'), 'click')
                 }
             });
         // html2canvas
